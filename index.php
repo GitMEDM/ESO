@@ -2,7 +2,7 @@
   // DEFINICJA ADRESU URL
 	DEFINE("URL", "http://sjp.pwn.pl/");
 
-  // ILOå∆ STRON DLA DANEJ LITERY (Z www.sjp.pwn.pl)
+  // ILO≈öƒÜ STRON DLA DANEJ LITERY (Z www.sjp.pwn.pl)
   $pages = array(
     'A' => 202, 'B' => 236, 'C' => 202, 'D' => 264, 'E' => 97, 'F' => 121, 'G' => 164,
     'H' => 100, 'I' => 82, 'J' => 75, 'K' => 413, 'L' => 115, 'M' => 269, 'N' => 334,
@@ -10,53 +10,53 @@
     'W' => 401, 'X' => 1, 'Y' => 2, 'Z' => 341
   );
 
-  // FUNKCJA PRZETWARZAJ•CA DANE Z ADRESU URL
+  // FUNKCJA PRZETWARZAJƒÑCA DANE Z ADRESU URL
 	function getData($url)
 	{
     // POBIERANIE STOPKI DO ZMIENNEJ $data
     $data = @file_get_contents($url);
 
-    // JEåLI NIE SZUKAMY WYRAZU (TO ZMIENNA GLOBALNA NIE $_GET['szukaj'] ISTNIEJE)
+    // JE≈öLI NIE SZUKAMY WYRAZU (TO ZMIENNA GLOBALNA NIE $_GET['szukaj'] ISTNIEJE)
     if(!isset($_GET['szukaj']))
     {
-      // PODZIELENIE CA£EJ STRONY WZGL DEM ZNACZNIKA: row col-wrapper alfa 
+      // PODZIELENIE CA≈ÅEJ STRONY WZGLƒòDEM ZNACZNIKA: row col-wrapper alfa 
       $data = explode('<div class="row col-wrapper alfa ">', $data);
-      // PODZIELENIE PRAWEJ STRONY WZGL DEM ZNACZNIKA: row col-wrapper
+      // PODZIELENIE PRAWEJ STRONY WZGLƒòDEM ZNACZNIKA: row col-wrapper
       $data = explode('<div class="row col-wrapper">', $data[1]);
-      // USUNI CIE ZNAKU HTML Z LEWEJ STRONY (INTERESUJE NAS TYLKO WYRAZ, NIE CA£A STRONA)
+      // USUNIƒòCIE ZNAKU HTML Z LEWEJ STRONY (INTERESUJE NAS TYLKO WYRAZ, NIE CA≈ÅA STRONA)
       $data = strip_tags($data[0]);
-      // USUNI CIE BIA£YCH ZNAK”W (DUØE ILOåCI SPACJI, NOWE LINIE)
+      // USUNIƒòCIE BIA≈ÅYCH ZNAK√ìW (DU≈ªE ILO≈öCI SPACJI, NOWE LINIE)
       $data = preg_replace('/\s+/', ' ', trim($data));
-      // ROZBICIE WYRAZ”W (MAMY KAØDY WYRAZ W TABLICY)
+      // ROZBICIE WYRAZ√ìW (MAMY KA≈ªDY WYRAZ W TABLICY)
       $data = explode(' ', $data);
-      // ZMIENNA POMOCNICZA (POZBYCIE SI  KR”TKICH WYRAZ”W NP. "A")
+      // ZMIENNA POMOCNICZA (POZBYCIE SIƒò KR√ìTKICH WYRAZ√ìW NP. "A")
       $ret = array();
-      // PRZEJåCIE PO WYRAZACH
+      // PRZEJ≈öCIE PO WYRAZACH
       foreach($data as $word)
       {
-        // JEåLI WYRAZ MA WI CEJ NIØ 3 LITERY I NIE MA GO W TABLICY
+        // JE≈öLI WYRAZ MA WIƒòCEJ NI≈ª 3 LITERY I NIE MA GO W TABLICY
         if(strlen($word) > 3 && !in_array($word, $ret))
 		  // DODAJNIE WYRAZU DO TABLICY
           array_push($ret, $word);
       }
     }
-	// JEåLI SZUKAMY WYRAZU
+	// JE≈öLI SZUKAMY WYRAZU
     else
     {
-      // PODZIELENIE STRONY WZGL DEM ZNACZNIKA: col-sm-12 col-md-5 col-lg-6 search-content
+      // PODZIELENIE STRONY WZGLƒòDEM ZNACZNIKA: col-sm-12 col-md-5 col-lg-6 search-content
       $data = explode('<div class="col-sm-12 col-md-5 col-lg-6 search-content">', $data);
-      // USUNI CIE ZNACZNIKA: a (LINKI/ODNOåNIKI)
+      // USUNIƒòCIE ZNACZNIKA: a (LINKI/ODNO≈öNIKI)
       $data = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $data[1]);
-      // USUNI CIE IKON (fontawesome)
+      // USUNIƒòCIE IKON (fontawesome)
       $data = str_replace('<i class="fa fa-chevron-circle-down"></i>', '', $data);
       $data = str_replace('<i class="fa fa-chevron-right"></i>', '', $data);
       $data = str_replace('<i class="fa fa-star"></i>', '- ', $data);
-      // USUNI CIE ZNAK”W I TEKST”W KT”RE NIE S• POTRZEBNE
-      $data = str_replace('ïïï', '', $data);
-      $data = str_replace('WiÍcej porad', '', $data);
-      $data = str_replace('<span class="prefix">ïïï</span>', '', $data);
-      $data = str_replace('WiÍcej', '', $data);
-      // PODZIELENIE DO£U STRONY (INTERESUJE NAS TYLKO TEKST, NIE CA£A STRONA)
+      // USUNIƒòCIE ZNAK√ìW I TEKST√ìW KT√ìRE NIE SƒÑ POTRZEBNE
+      $data = str_replace('‚Ä¢‚Ä¢‚Ä¢', '', $data);
+      $data = str_replace('Wiƒôcej porad', '', $data);
+      $data = str_replace('<span class="prefix">‚Ä¢‚Ä¢‚Ä¢</span>', '', $data);
+      $data = str_replace('Wiƒôcej', '', $data);
+      // PODZIELENIE DO≈ÅU STRONY (INTERESUJE NAS TYLKO TEKST, NIE CA≈ÅA STRONA)
       $data = explode('<div class="wyniki enc-wyniki enc-anchor">', $data);
       $data = explode('<div id="float-banner-bottom" class="row col-wrapper">', $data[0]);
       $ret = $data[0];
@@ -65,10 +65,182 @@
     return $ret;
 	}
 
-  // JEåLI NIE SZUKAMY TEKSTU POKØ WYRAZY
+  // JE≈öLI NIE SZUKAMY TEKSTU POK≈ª WYRAZY
   if(!isset($_GET['szukaj']))
     $data = getData(URL.'lista/'.@$_GET['litera'].';'.@$_GET['strona'].'.html');
-  // JEåLI SZUKAMY TEKST POKAØ WYNIKI
+  // JE≈öLI SZUKAMY TEKST POKA≈ª WYNIKI
   else
     $data = getData(URL.'szukaj/'.@$_GET['szukaj'].'.html');
 ?>
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <!-- SZUKANIE ODPOWIEDNIEJ LITERY -->
+    <title>S≈Çownik PWN <?php echo((isset($_GET['litera']))?'&middot; '.$_GET['litera']:''); ?></title>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="css/toolkit.css" rel="stylesheet">
+    <link href="css/application.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+
+  </head>
+<body class="bpi">
+<div class="bpv" id="app-growl"></div>
+
+<nav class="ck rj aeq ro vq app-navbar">
+  <button class="re rh ayd" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="rf"></span>
+  </button>
+
+  <a class="e" href="index.php">S≈Çownik PWN</a>
+
+  <div class="collapse f" id="navbarResponsive">
+    <ul class="navbar-nav ain" style="margin: 0 auto;">
+      <?php
+        // POKA≈ª MENU PƒòTLI OD A DO Z
+        for($litera='A'; $litera < 'Z'; $litera++)
+          echo('<li class="qx"><a class="qv" href="index.php?litera='.$litera.'">'.$litera.'</a></li>');
+		echo('<li class="qx"><a class="qv" href="index.php?litera='.'Z'.'">'.'Z'.'</a></li>');
+      ?>
+    </ul>
+  </div>
+</nav>
+
+<div class="by ahy">
+  <div class="dq">
+    <div class="fh">
+      <div class="rp bqq agk">
+        <div class="rq awx">
+          <h6 class="rr">Mateusz Misiak</h6>
+          <p class="agk">Ekstrakcja s≈Çownik√≥w online na przyk≈Çadzie <a href="http://sjp.pwn.pl">S≈Çownika PWN</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fk">
+      <ul class="ca bqe bqf agk">
+        <form action="index.php" method="get">
+        <li class="tu b ahx">
+          <div class="input-group">
+            <input type="text" name="szukaj" class="form-control" placeholder="Szukaj s≈Çowa..">
+            <div class="om">
+              <button type="button" class="cg pl">
+                <span class="fa fa-search"></span>
+              </button>
+            </div>
+          </div>
+        </li>
+        </form>
+<?php if(!isset($_GET['szukaj'])) { ?>
+        <li class="tu b ahx">
+          <div class="tv">
+            <div class="bqj" style="text-align: center;">
+              <?php
+                if(!isset($_GET['litera']))
+                  echo('<h5>Wybierz literƒô aby przeszukaƒá s≈Çownik.</h5>');
+                else
+                {
+                  // POKA≈ª PIERWSZƒÑ STRONƒò
+                  echo('<a href="index.php?litera='.$_GET['litera'].'" class="cg pl">&laquo;</a>&nbsp');
+
+                  // AKTUALNA STRONA, JE≈öLI NIE WYRANO USTAW 1
+                  $page = (isset($_GET['strona']))?$_GET['strona']:1;
+
+                  // LICZNIK STRONNICOWANIA OD LEWEJ DO AKTUALNEJ STRONY
+                  $left = 0;
+                  for($i=($page-3); $i >= 1 && $left < 3; $i++)
+                  {
+                    echo('<a href="index.php?litera='.$_GET['litera'].'&strona='.$i.'" class="cg pl">'.$i.'</a>');
+                    $left++;
+                  }
+
+                  // POKA≈ª AKTUALNƒÑ STRONƒò
+                  echo('<a href="#" class="cg pl disabled">'.$page.'</a>');
+
+                  // POKA≈ª PRAWƒÑ STRONƒò STRONNICOWANIA
+                  $right = 0;
+                  for($i=$page+1; $i <= $pages[$_GET['litera']] && $right < (3+(3-$left)); $i++)
+                  {
+                    echo('<a href="index.php?litera='.$_GET['litera'].'&strona='.$i.'" class="cg pl">'.$i.'</a>');
+                    $right++;
+                  }
+
+                  // POKA≈ª OSTATNIƒÑ STORNƒò
+                  echo('&nbsp<a href="index.php?litera='.$_GET['litera'].'&strona='.$pages[$_GET['litera']].'" class="cg pl">&raquo;</a>');
+                }
+              ?>
+            </div>
+          </div>
+        </li>
+        <?php if(isset($_GET['litera'])) { ?>
+          <li class="tu b ahx">
+            <div class="tv">
+              <div class="bqj" style="text-align: center;">
+                <h6>Wyrazy na literƒô "<?php echo($_GET['litera']); ?>"</h6>
+              </div>
+            </div>
+          </li>
+          <br>
+          <?php
+            // PƒòTLA PO WSZYSTKICH WYRAZACH
+            foreach($data as $word)
+            {
+              echo('
+                <li class="tu b ahx">
+                  <div class="tv">
+                    <div class="bqj">
+                      <h6><a href="index.php?szukaj='.$word.'">'.$word.'</a></h6>
+                    </div>
+                  </div>
+                </li>
+              ');
+            }
+          ?>
+      <?php } ?>
+<?php } else { ?>
+  <li class="tu b ahx">
+    <div class="tv" style="width:100%;">
+      <div class="bqj">
+          <!-- strip_tags USUWA ZNACZNIKI HTML ZA WYJƒÑTKIEM PODANYCH -->
+          <?php echo(strip_tags($data, "<b><br></br><h1><span><div><i>")); ?>
+      </div>
+    </div>
+  </li>
+<?php } ?>
+      </ul>
+    </div>
+    <div class="fh">
+      <div class="alert to alert-dismissible aye" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <b>Uwaga!</b> Aplikacja wykorzystuje wy≈ÇƒÖcznie bazƒô ze strony <a href="http://sjp.pwn.pl/">http://sjp.pwn.pl/</a>.
+      </div>
+
+      <div class="rp bqu">
+        <div class="rq">¬© 2017 Mateusz Misiak</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/tether.min.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/toolkit.js"></script>
+    <script src="js/application.js"></script>
+    <script>
+      $(function(){
+        if (window.BS&&window.BS.loader&&window.BS.loader.length) {
+          while(BS.loader.length){(BS.loader.pop())()}
+        }
+      })
+    </script>
+  </body>
+</html>
